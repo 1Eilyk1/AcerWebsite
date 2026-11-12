@@ -1,73 +1,31 @@
 
-/* MOBILE NAVIGATION */
+// ==========================================
+// SUPABASE CONFIGURATION
+// ==========================================
 
-const menuToggle = document.getElementById("menuToggle");
-const navigation = document.getElementById("navigation");
+const SUPABASE_URL = "https://qpcsskiocfeeodunpcxa.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_oiJHNFVdHWa-aATe_HWJoQ_RLB2m8BZ";
 
-if (menuToggle && navigation) {
-    menuToggle.addEventListener("click", () => {
-        const isOpen = navigation.classList.toggle("show");
-
-        menuToggle.setAttribute("aria-expanded", String(isOpen));
-        menuToggle.textContent = isOpen ? "✕" : "☰";
-    });
-
-    navigation.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", () => {
-            navigation.classList.remove("show");
-            menuToggle.setAttribute("aria-expanded", "false");
-            menuToggle.textContent = "☰";
-        });
-    });
-}
-
-/* ACTIVE TABLE OF CONTENTS */
-
-const policySections = document.querySelectorAll(
-    ".policy-section[id]"
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
 );
 
-const tocLinks = document.querySelectorAll(".toc a");
+// ==========================================
+// PRIVACY FEEDBACK FORM
+// ==========================================
 
-if (policySections.length && tocLinks.length) {
-    const sectionObserver = new IntersectionObserver(
-        entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const sectionId = entry.target.id;
+document.addEventListener("DOMContentLoaded", () => {
 
-                    tocLinks.forEach(link => {
-                        const isActive =
-                            link.getAttribute("href") === `#${sectionId}`;
+    const form = document.getElementById("privacyFeedbackForm");
+    const status = document.getElementById("feedbackStatus");
+    const submitButton = form?.querySelector('button[type="submit"]');
 
-                        link.classList.toggle("active", isActive);
-                    });
-                }
-            });
-        },
-        {
-            rootMargin: "-18% 0px -70% 0px",
-            threshold: 0
-        }
-    );
+    if (!form || !status || !submitButton) return;
 
-    policySections.forEach(section => {
-        sectionObserver.observe(section);
-    });
-}
+    form.addEventListener("submit", async (event) => {
 
-/* PRIVACY FEEDBACK FORM */
-
-const feedbackForm = document.getElementById("privacyFeedbackForm");
-const feedbackStatus = document.getElementById("feedbackStatus");
-
-if (feedbackForm && feedbackStatus) {
-    feedbackForm.addEventListener("submit", event => {
         event.preventDefault();
-
-        if (!feedbackForm.reportValidity()) {
-            return;
-        }
 
         const name = document.getElementById("feedbackName").value.trim();
         const email = document.getElementById("feedbackEmail").value.trim();
@@ -75,49 +33,56 @@ if (feedbackForm && feedbackStatus) {
         const message = document.getElementById("feedbackMessage").value.trim();
 
         if (!name || !email || !subject || !message) {
-            showFeedbackStatus(
-                "Please complete all required fields.",
-                "error"
-            );
+            status.textContent = "Please complete all required fields.";
+            status.style.color = "#dc3545";
             return;
         }
 
-        const recipient = "support.ph@hsnservice.com";
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+        status.textContent = "Saving your feedback...";
+        status.style.color = "#64748b";
 
-        const emailSubject = encodeURIComponent(
-            `[HSNP Privacy Policy Feedback] ${subject}`
-        );
+        try {
 
-        const emailBody = encodeURIComponent(
-`DATA PRIVACY POLICY FEEDBACK
+            const { data, error } = await supabaseClient
+                .from("privacy_feedback")
+                .insert([
+                    {
+                        name: name,
+                        email: email,
+                        subject: subject,
+                        message: message
+                    }
+                ])
+                .select("id")
+                .single();
 
-Name: ${name}
-Email Address: ${email}
+            if (error) throw error;
 
-Subject: ${subject}
+            status.textContent =
+                "Thank you! Your feedback has been successfully submitted.";
 
-Feedback:
-${message}
+            status.style.color = "#00A878";
 
---------------------------------
-Submitted through the HSN Philippines Data Privacy Statement page.`
-        );
+            form.reset();
 
-        const mailtoLink =
-            `mailto:${recipient}?subject=${emailSubject}&body=${emailBody}`;
+        } catch (error) {
 
-        showFeedbackStatus(
-            "Your email application will open with your feedback prepared. Please review and press Send to submit it.",
-            "info"
-        );
+            console.error("Feedback submission error:", error);
 
-        window.location.href = mailtoLink;
+            status.textContent =
+                "Unable to submit your feedback. Please try again later.";
+
+            status.style.color = "#dc3545";
+
+        } finally {
+
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Send Feedback <span>→</span>';
+
+        }
+
     });
-}
 
-function showFeedbackStatus(message, type) {
-    if (!feedbackStatus) return;
-
-    feedbackStatus.textContent = message;
-    feedbackStatus.className = `feedback-status show ${type}`;
-}
+});
