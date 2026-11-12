@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acer Company Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg: #07110d;
+      --panel: rgba(15, 31, 23, .88);
+      --panel-2: rgba(21, 43, 31, .78);
+      --line: rgba(132, 220, 157, .17);
+      --green: #83e09a;
+      --green-2: #36b85c;
+      --text: #eff8f0;
+      --muted: #a7b9ab;
+      --danger: #ff8e8e;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+      background:
+        radial-gradient(900px 500px at 85% 5%, rgba(54,184,92,.18), transparent 60%),
+        radial-gradient(700px 500px at 0% 100%, rgba(31,112,63,.17), transparent 60%),
+        var(--bg);
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell { width: min(1120px, calc(100% - 36px)); margin: 0 auto; padding: 28px 0 48px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:34px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.04em; }
+    .brand-mark { width:42px; height:42px; border-radius:13px; display:grid; place-items:center; color:#07110d; background:linear-gradient(135deg,#a7f2b4,#35b85b); font-weight:900; box-shadow:0 8px 28px rgba(54,184,92,.22); }
+    .brand small { display:block; color:var(--muted); font-size:11px; font-weight:600; letter-spacing:.16em; margin-top:2px; }
+    .status { color:var(--muted); font-size:12px; border:1px solid var(--line); padding:8px 12px; border-radius:999px; }
+    .login-wrap { min-height: calc(100vh - 130px); display:grid; place-items:center; }
+    .login-card { width:min(440px,100%); background:var(--panel); border:1px solid var(--line); border-radius:24px; padding:34px; box-shadow:var(--shadow); backdrop-filter:blur(18px); }
+    .eyebrow { color:var(--green); text-transform:uppercase; letter-spacing:.18em; font-size:11px; font-weight:800; }
+    h1 { margin:10px 0 8px; font-size:30px; letter-spacing:-.04em; }
+    .sub { color:var(--muted); line-height:1.6; margin:0 0 26px; font-size:14px; }
+    label { display:block; color:#d8e8db; font-size:12px; font-weight:700; margin:16px 0 8px; }
+    input { width:100%; color:var(--text); background:#08150e; border:1px solid var(--line); border-radius:12px; padding:13px 14px; outline:none; transition:.2s; }
+    input:focus { border-color:var(--green-2); box-shadow:0 0 0 3px rgba(54,184,92,.12); }
+    .primary { width:100%; border:0; border-radius:12px; padding:13px 16px; margin-top:22px; color:#06110a; font-weight:800; background:linear-gradient(135deg,#a8f0b4,#43c568); box-shadow:0 10px 24px rgba(54,184,92,.18); }
+    .primary:disabled { opacity:.6; cursor:wait; }
+    .message { min-height:20px; margin:13px 0 0; color:var(--danger); font-size:12px; line-height:1.5; }
+    .hint { border-top:1px solid var(--line); margin-top:22px; padding-top:17px; color:var(--muted); font-size:11px; line-height:1.6; }
+    .dashboard { display:none; }
+    .welcome { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; margin:26px 0 24px; }
+    .welcome h1 { font-size:clamp(28px,4vw,42px); margin:8px 0 5px; }
+    .welcome p { margin:0; color:var(--muted); }
+    .role-pill { display:inline-flex; align-items:center; gap:7px; border:1px solid var(--line); border-radius:999px; padding:8px 12px; color:var(--green); font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+    .actions { display:flex; gap:10px; }
+    .secondary { color:var(--text); background:var(--panel-2); border:1px solid var(--line); border-radius:11px; padding:10px 14px; font-weight:700; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; margin:22px 0; }
+    .stat, .section { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:20px; box-shadow:0 12px 40px rgba(0,0,0,.12); }
+    .stat span { color:var(--muted); font-size:12px; }
+    .stat strong { display:block; font-size:27px; margin-top:8px; }
+    .section { margin-top:16px; }
+    .section-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; }
+    h2 { font-size:17px; margin:0; }
+    .section-head small { color:var(--muted); }
+    .item { border-top:1px solid var(--line); padding:14px 0; }
+    .item:first-of-type { border-top:0; }
+    .item strong { display:block; margin-bottom:5px; }
+    .item p { color:var(--muted); font-size:13px; line-height:1.5; margin:0; white-space:pre-wrap; }
+    .empty { color:var(--muted); font-size:13px; padding:12px 0; }
+    .hidden { display:none !important; }
+    .footer { color:#789080; font-size:11px; text-align:center; margin-top:35px; }
+    @media (max-width:700px) {
+      .grid { grid-template-columns:1fr; }
+      .welcome { align-items:flex-start; flex-direction:column; }
+      .login-card { padding:25px; }
+      .topbar { align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div>ACER <small>COMPANY PORTAL</small></div>
+      </div>
+      <div class="status" id="connectionStatus">Connecting to secure portal…</div>
+    </header>
+
+    <section class="login-wrap" id="loginView">
+      <div class="login-card">
+        <div class="eyebrow">Welcome back</div>
+        <h1>Sign in to your portal.</h1>
+        <p class="sub">Use your company account to access the employee or administrator workspace.</p>
+        <form id="loginForm">
+          <label for="email">Email address</label>
+          <input id="email" type="email" autocomplete="username" placeholder="name@company.com" required />
+          <label for="password">Password</label>
+          <input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required />
+          <button class="primary" id="loginButton" type="submit">Sign in</button>
+          <p class="message" id="loginMessage" role="alert"></p>
+        </form>
+        <div class="hint">Accounts are created by your administrator. Public self-registration is not available on this portal.</div>
+      </div>
+    </section>
+
+    <section class="dashboard" id="dashboardView">
+      <div class="welcome">
+        <div>
+          <div class="eyebrow" id="workspaceLabel">Company workspace</div>
+          <h1 id="welcomeTitle">Welcome</h1>
+          <p id="welcomeSubtitle">Here is what's happening in your company.</p>
+        </div>
+        <div class="actions">
+          <span class="role-pill" id="rolePill">Employee</span>
+          <button class="secondary" id="refreshButton" type="button">Refresh</button>
+          <button class="secondary" id="logoutButton" type="button">Log out</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="stat"><span>Workspace access</span><strong id="accessValue">Employee</strong></div>
+        <div class="stat"><span>Company events</span><strong id="eventCount">—</strong></div>
+        <div class="stat"><span>Announcements</span><strong id="announcementCount">—</strong></div>
+      </div>
+
+      <div class="section" id="adminNotice" style="display:none">
+        <div class="section-head">
+          <h2>Administrator overview</h2>
+          <small>Management workspace</small>
+        </div>
+        <p class="sub" style="margin:0">You are signed in with administrator permissions. Employee account management and content editing can be added next.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><h2>Company events</h2><small>Latest scheduled events</small></div>
+        <div id="eventsList" class="empty">Loading events…</div>
+      </div>
+
+      <div class="section">
+        <div class="section-head"><h2>Announcements</h2><small>Company updates</small></div>
+        <div id="announcementsList" class="empty">Loading announcements…</div>
+      </div>
+    </section>
+
+    <div class="footer">ACER COMPANY PORTAL · Secure account access</div>
+  </main>
+
+  <script>
+    // Replace these two placeholders with your Supabase Project URL
+    // and Publishable key. Never use a secret/service-role key here.
+    const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+    const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+    const $ = (id) => document.getElementById(id);
+    let supabaseClient = null;
+    let currentUser = null;
+    let currentProfile = null;
+
+    function setMessage(message, isError = true) {
+      $("loginMessage").textContent = message || "";
+      $("loginMessage").style.color = isError ? "var(--danger)" : "var(--green)";
+    }
+
+    function showLogin() {
+      $("dashboardView").style.display = "none";
+      $("loginView").style.display = "grid";
+      $("password").value = "";
+    }
+
+    function showDashboard() {
+      $("loginView").style.display = "none";
+      $("dashboardView").style.display = "block";
+    }
+
+    async function loadProfile(user) {
+      const { data: profile, error } = await supabaseClient
+        .from("profiles")
+        .select("full_name, role")
+        .eq("id", user.id)
+        .single();
+
+      if (error || !profile) {
+        throw new Error("Your account profile could not be loaded. Please contact your administrator.");
+      }
+
+      if (!["admin", "employee"].includes(profile.role)) {
+        throw new Error("Your account has an invalid access role. Please contact your administrator.");
+      }
+
+      currentUser = user;
+      currentProfile = profile;
+      $("welcomeTitle").textContent = `Welcome, ${profile.full_name || user.email}`;
+      $("welcomeSubtitle").textContent = profile.role === "admin"
+        ? "Manage and monitor your company workspace."
+        : "Here are the latest company updates for you.";
+      $("workspaceLabel").textContent = profile.role === "admin" ? "Administrator workspace" : "Employee workspace";
+      $("rolePill").textContent = profile.role;
+      $("accessValue").textContent = profile.role === "admin" ? "Admin" : "Employee";
+      $("adminNotice").style.display = profile.role === "admin" ? "block" : "none";
+
+      showDashboard();
+      await loadDashboardData();
+    }
+
+    function renderItems(targetId, rows, type) {
+      const target = $(targetId);
+      target.innerHTML = "";
+
+      if (!rows || rows.length === 0) {
+        target.className = "empty";
+        target.textContent = type === "events"
+          ? "No company events have been added yet."
+          : "There are no published announcements yet.";
+        return;
+      }
+
+      target.className = "";
+      rows.forEach((row) => {
+        const item = document.createElement("article");
+        item.className = "item";
+
+        const title = document.createElement("strong");
+        title.textContent = row.title || "Untitled";
+
+        const description = document.createElement("p");
+        if (type === "events") {
+          const dateText = row.event_date ? new Date(row.event_date).toLocaleString() : "Date to be announced";
+          const locationText = row.location ? ` · ${row.location}` : "";
+          description.textContent = `${dateText}${locationText}${row.description ? "\n" + row.description : ""}`;
+        } else {
+          description.textContent = row.content || "";
+        }
+
+        item.append(title, description);
+        target.appendChild(item);
+      });
+    }
+
+    async function loadDashboardData() {
+      $("eventsList").textContent = "Loading events…";
+      $("announcementsList").textContent = "Loading announcements…";
+
+      const [eventsResult, announcementsResult] = await Promise.all([
+        supabaseClient.from("events").select("id,title,description,event_date,location").order("event_date", { ascending: true }),
+        supabaseClient.from("announcements").select("id,title,content,is_published,created_at").order("created_at", { ascending: false })
+      ]);
+
+      if (eventsResult.error) {
+        $("eventsList").textContent = "Unable to load events. Check your database policies.";
+        console.error("Events:", eventsResult.error);
+      } else {
+        renderItems("eventsList", eventsResult.data, "events");
+      }
+
+      if (announcementsResult.error) {
+        $("announcementsList").textContent = "Unable to load announcements. Check your database policies.";
+        console.error("Announcements:", announcementsResult.error);
+      } else {
+        renderItems("announcementsList", announcementsResult.data, "announcements");
+      }
+
+      $("eventCount").textContent = eventsResult.error ? "—" : eventsResult.data.length;
+      $("announcementCount").textContent = announcementsResult.error ? "—" : announcementsResult.data.length;
+    }
+
+    async function signOut() {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      currentProfile = null;
+      showLogin();
+    }
+
+    async function initialize() {
+      if (SUPABASE_URL.includes("YOUR_") || SUPABASE_PUBLISHABLE_KEY.includes("YOUR_")) {
+        $("connectionStatus").textContent = "Setup required";
+        setMessage("Add your Supabase Project URL and Publishable key in this file first.");
+        return;
+      }
+
+      if (!window.supabase?.createClient) {
+        $("connectionStatus").textContent = "Library unavailable";
+        setMessage("Could not load the Supabase library. Check your internet connection.");
+        return;
+      }
+
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+      $("connectionStatus").textContent = "Portal connected";
+
+      $("loginForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = $("loginButton");
+        button.disabled = true;
+        button.textContent = "Signing in…";
+        setMessage("");
+
+        try {
+          const email = $("email").value.trim();
+          const password = $("password").value;
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+          if (error) throw error;
+          await loadProfile(data.user);
+
+          // Activity logging is best-effort; login still succeeds if logging fails.
+          await supabaseClient.from("activity_logs").insert({
+            user_id: data.user.id,
+            action: "login",
+            details: "Signed in to company portal"
+          });
+        } catch (error) {
+          console.error(error);
+          setMessage(error.message || "Sign-in failed. Please check your credentials.");
+          await supabaseClient.auth.signOut();
+          showLogin();
+        } finally {
+          button.disabled = false;
+          button.textContent = "Sign in";
+        }
+      });
+
+      $("logoutButton").addEventListener("click", signOut);
+      $("refreshButton").addEventListener("click", loadDashboardData);
+
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      if (sessionData.session?.user) {
+        try {
+          await loadProfile(sessionData.session.user);
+        } catch (error) {
+          console.error(error);
+          setMessage(error.message);
+          await signOut();
+        }
+      }
+
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (event === "SIGNED_OUT" || !session) {
+          currentUser = null;
+          currentProfile = null;
+          showLogin();
+        }
+      });
+    }
+
+    initialize();
+  </script>
+</body>
+</html>
