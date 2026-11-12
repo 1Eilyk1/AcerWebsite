@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,127 +6,332 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Acer Company Portal">
   <title>Acer | Company Portal</title>
+
   <style>
     :root {
-      --green: #83b735;
-      --green-bright: #a4e34a;
-      --bg: #07100c;
-      --panel: rgba(17, 31, 23, .78);
-      --muted: #aab7ad;
-      --line: rgba(164, 227, 74, .18);
+      --green: #00a878;
+      --green-dark: #008f68;
+      --green-light: #eaf8f2;
+      --forest: #172720;
+      --text: #24352d;
+      --muted: #718078;
+      --line: #e2ebe6;
+      --background: #f7faf8;
+      --white: #ffffff;
     }
+
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      margin: 0; min-height: 100vh; color: #f4f8f3;
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
       font-family: Inter, "Segoe UI", Arial, sans-serif;
       background:
-        radial-gradient(ellipse at 80% 15%, rgba(131,183,53,.18), transparent 35%),
-        radial-gradient(ellipse at 10% 90%, rgba(44,105,58,.2), transparent 38%),
-        linear-gradient(135deg, #050a07, #0b1710 55%, #07100c);
+        radial-gradient(circle at 85% 12%, rgba(0,168,120,.08), transparent 28%),
+        radial-gradient(circle at 8% 85%, rgba(0,168,120,.06), transparent 30%),
+        var(--background);
     }
+
     header {
-      width: min(1120px, calc(100% - 48px)); margin: auto;
-      min-height: 86px; display: flex; align-items: center;
-      justify-content: space-between; border-bottom: 1px solid var(--line);
+      width: min(1180px, calc(100% - 48px));
+      min-height: 88px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
     }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .5px; }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      color: var(--forest);
+      font-weight: 850;
+      letter-spacing: .7px;
+    }
+
     .brand-mark {
-      width: 38px; height: 38px; display: grid; place-items: center;
-      border: 1px solid rgba(164,227,74,.55); border-radius: 11px;
-      color: var(--green-bright); font-size: 19px; background: rgba(131,183,53,.1);
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: white;
+      background: var(--green);
+      font-size: 21px;
+      font-weight: 900;
+      box-shadow: 0 7px 20px rgba(0,168,120,.18);
     }
-    .brand small { display: block; color: var(--muted); font-size: 10px; font-weight: 500; letter-spacing: 2px; margin-top: 3px; }
-    nav a { color: #d7e2d8; text-decoration: none; font-size: 14px; }
-    nav a:hover { color: var(--green-bright); }
+
+    .brand small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: 2px;
+    }
+
+    nav a {
+      color: var(--forest);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    nav a:hover { color: var(--green); }
+
     main {
-      width: min(1120px, calc(100% - 48px)); margin: auto;
-      min-height: calc(100vh - 150px); display: grid;
-      grid-template-columns: 1.15fr .85fr; align-items: center; gap: 54px;
-      padding: 72px 0;
+      width: min(1180px, calc(100% - 48px));
+      min-height: calc(100vh - 160px);
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      align-items: center;
+      gap: 64px;
+      padding: 75px 0;
     }
+
     .eyebrow {
-      display: inline-flex; align-items: center; gap: 9px; color: var(--green-bright);
-      font-size: 12px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green-dark);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 800;
     }
-    .eyebrow:before { content: ""; width: 25px; height: 1px; background: var(--green-bright); }
-    h1 { font-size: clamp(42px, 6vw, 70px); line-height: 1.04; letter-spacing: -2.5px; margin: 22px 0; }
-    h1 span { color: var(--green-bright); }
-    .intro { color: var(--muted); font-size: 17px; line-height: 1.8; max-width: 590px; }
-    .actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 32px; }
+
+    .eyebrow::before {
+      content: "";
+      width: 25px;
+      height: 2px;
+      background: var(--green);
+    }
+
+    h1 {
+      color: var(--forest);
+      font-size: clamp(42px, 6vw, 70px);
+      line-height: 1.06;
+      letter-spacing: -2.8px;
+      margin: 22px 0;
+    }
+
+    h1 span { color: var(--green); }
+
+    .intro {
+      max-width: 590px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.9;
+    }
+
+    .actions {
+      display: flex;
+      gap: 13px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
     .btn {
-      min-height: 48px; padding: 0 22px; display: inline-flex; align-items: center;
-      justify-content: center; border-radius: 9px; text-decoration: none;
-      font-weight: 700; font-size: 14px; transition: .2s ease;
+      min-height: 49px;
+      padding: 0 23px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 750;
+      transition: .2s ease;
     }
-    .btn-primary { background: var(--green-bright); color: #10200c; box-shadow: 0 8px 30px rgba(164,227,74,.16); }
-    .btn-primary:hover { transform: translateY(-2px); background: #b6f46b; }
-    .btn-secondary { border: 1px solid rgba(220,240,220,.2); color: #e8f0e8; background: rgba(255,255,255,.03); }
-    .btn-secondary:hover { border-color: var(--green); }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      box-shadow: 0 8px 22px rgba(0,168,120,.17);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      color: var(--forest);
+      border: 1px solid var(--line);
+      background: white;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--green);
+      color: var(--green-dark);
+    }
+
     .feature-card {
-      position: relative; overflow: hidden; padding: 34px; border-radius: 20px;
-      border: 1px solid var(--line); background: linear-gradient(145deg, rgba(24,45,30,.88), rgba(9,19,13,.9));
-      box-shadow: 0 25px 80px rgba(0,0,0,.3);
+      position: relative;
+      overflow: hidden;
+      padding: 38px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 20px 65px rgba(23,39,32,.07);
     }
-    .feature-card:after {
-      content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%;
-      background: rgba(131,183,53,.1); filter: blur(5px); right: -90px; top: -100px;
+
+    .feature-card::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(0,168,120,.07);
+      right: -100px;
+      top: -110px;
     }
+
     .card-icon {
-      width: 54px; height: 54px; border-radius: 15px; display: grid; place-items: center;
-      color: var(--green-bright); font-size: 25px; background: rgba(164,227,74,.1);
-      border: 1px solid rgba(164,227,74,.2); margin-bottom: 24px;
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 27px;
+      border-radius: 16px;
+      color: var(--green-dark);
+      background: var(--green-light);
+      font-size: 27px;
     }
-    .feature-card h2 { margin: 0 0 12px; font-size: 23px; }
-    .feature-card p { margin: 0; color: var(--muted); line-height: 1.7; font-size: 14px; }
-    .feature-line { height: 1px; background: var(--line); margin: 25px 0; }
-    .status { display: flex; align-items: center; gap: 9px; color: #c9d7ca; font-size: 12px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 12px var(--green-bright); }
+
+    .feature-card h2 {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 13px;
+      color: var(--forest);
+      font-size: 24px;
+    }
+
+    .feature-card p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .feature-line {
+      height: 1px;
+      margin: 27px 0;
+      background: var(--line);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--forest);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px var(--green-light);
+    }
+
     footer {
-      width: min(1120px, calc(100% - 48px)); margin: auto; padding: 22px 0;
-      border-top: 1px solid var(--line); color: #819086; font-size: 12px;
-      display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      width: min(1180px, calc(100% - 48px));
+      margin: auto;
+      padding: 23px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
+
     @media (max-width: 760px) {
-      header { min-height: 72px; }
-      main { grid-template-columns: 1fr; gap: 38px; padding: 58px 0; }
-      h1 { letter-spacing: -1.5px; }
-      .feature-card { padding: 26px; }
+      header { min-height: 75px; }
+      main {
+        grid-template-columns: 1fr;
+        gap: 38px;
+        padding: 55px 0;
+      }
+      h1 { letter-spacing: -1.7px; }
+      .feature-card { padding: 27px; }
+      footer { line-height: 1.7; }
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="brand">
       <div class="brand-mark">A</div>
-      <div>ACER <small>COMPANY PORTAL</small></div>
+      <div>
+        ACER
+        <small>COMPANY PORTAL</small>
+      </div>
     </div>
-    <nav><a href="login.html">Employee / Admin Login&nbsp; →</a></nav>
+
+    <nav>
+      <a href="login.html">Employee / Admin Login&nbsp; →</a>
+    </nav>
   </header>
 
   <main>
     <section>
       <div class="eyebrow">Welcome to Acer</div>
-      <h1>Technology that<br><span>moves us forward.</span></h1>
+
+      <h1>
+        Technology that<br>
+        <span>moves us forward.</span>
+      </h1>
+
       <p class="intro">
-        Welcome to the Acer Company Portal. Access company updates, announcements,
-        and important information through one simple and secure space.
+        Welcome to the Acer Company Portal. Access company updates,
+        announcements, and important information through one simple
+        and secure space.
       </p>
+
       <div class="actions">
-        <a class="btn btn-primary" href="login.html">Go to Portal Login&nbsp; →</a>
-        <a class="btn btn-secondary" href="#about">Learn More</a>
+        <a class="btn btn-primary" href="login.html">
+          Go to Portal Login&nbsp; →
+        </a>
+
+        <a class="btn btn-secondary" href="#about">
+          Learn More
+        </a>
       </div>
     </section>
 
     <aside class="feature-card" id="about">
       <div class="card-icon">✦</div>
+
       <h2>One portal. One team.</h2>
+
       <p>
-        Sign in using your authorized company account to view the employee
-        dashboard. Administrators can access management features using an
-        admin account.
+        Sign in using your authorized company account to view the
+        employee dashboard. Administrators can access management
+        features using an admin account.
       </p>
+
       <div class="feature-line"></div>
-      <div class="status"><span class="dot"></span> Company portal access</div>
+
+      <div class="status">
+        <span class="dot"></span>
+        Company portal access
+      </div>
     </aside>
   </main>
 
@@ -133,6 +339,10 @@
     <span>© <span id="year"></span> Acer Company Portal</span>
     <span>For authorized employees and administrators</span>
   </footer>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+  </script>
 </body>
 </html>
