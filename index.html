@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Acer Company Portal">
+  <title>Acer | Company Portal</title>
+  <style>
+    :root {
+      --green: #83b735;
+      --green-bright: #a4e34a;
+      --bg: #07100c;
+      --panel: rgba(17, 31, 23, .78);
+      --muted: #aab7ad;
+      --line: rgba(164, 227, 74, .18);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; color: #f4f8f3;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(ellipse at 80% 15%, rgba(131,183,53,.18), transparent 35%),
+        radial-gradient(ellipse at 10% 90%, rgba(44,105,58,.2), transparent 38%),
+        linear-gradient(135deg, #050a07, #0b1710 55%, #07100c);
+    }
+    header {
+      width: min(1120px, calc(100% - 48px)); margin: auto;
+      min-height: 86px; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .5px; }
+    .brand-mark {
+      width: 38px; height: 38px; display: grid; place-items: center;
+      border: 1px solid rgba(164,227,74,.55); border-radius: 11px;
+      color: var(--green-bright); font-size: 19px; background: rgba(131,183,53,.1);
+    }
+    .brand small { display: block; color: var(--muted); font-size: 10px; font-weight: 500; letter-spacing: 2px; margin-top: 3px; }
+    nav a { color: #d7e2d8; text-decoration: none; font-size: 14px; }
+    nav a:hover { color: var(--green-bright); }
+    main {
+      width: min(1120px, calc(100% - 48px)); margin: auto;
+      min-height: calc(100vh - 150px); display: grid;
+      grid-template-columns: 1.15fr .85fr; align-items: center; gap: 54px;
+      padding: 72px 0;
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; color: var(--green-bright);
+      font-size: 12px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
+    }
+    .eyebrow:before { content: ""; width: 25px; height: 1px; background: var(--green-bright); }
+    h1 { font-size: clamp(42px, 6vw, 70px); line-height: 1.04; letter-spacing: -2.5px; margin: 22px 0; }
+    h1 span { color: var(--green-bright); }
+    .intro { color: var(--muted); font-size: 17px; line-height: 1.8; max-width: 590px; }
+    .actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 32px; }
+    .btn {
+      min-height: 48px; padding: 0 22px; display: inline-flex; align-items: center;
+      justify-content: center; border-radius: 9px; text-decoration: none;
+      font-weight: 700; font-size: 14px; transition: .2s ease;
+    }
+    .btn-primary { background: var(--green-bright); color: #10200c; box-shadow: 0 8px 30px rgba(164,227,74,.16); }
+    .btn-primary:hover { transform: translateY(-2px); background: #b6f46b; }
+    .btn-secondary { border: 1px solid rgba(220,240,220,.2); color: #e8f0e8; background: rgba(255,255,255,.03); }
+    .btn-secondary:hover { border-color: var(--green); }
+    .feature-card {
+      position: relative; overflow: hidden; padding: 34px; border-radius: 20px;
+      border: 1px solid var(--line); background: linear-gradient(145deg, rgba(24,45,30,.88), rgba(9,19,13,.9));
+      box-shadow: 0 25px 80px rgba(0,0,0,.3);
+    }
+    .feature-card:after {
+      content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%;
+      background: rgba(131,183,53,.1); filter: blur(5px); right: -90px; top: -100px;
+    }
+    .card-icon {
+      width: 54px; height: 54px; border-radius: 15px; display: grid; place-items: center;
+      color: var(--green-bright); font-size: 25px; background: rgba(164,227,74,.1);
+      border: 1px solid rgba(164,227,74,.2); margin-bottom: 24px;
+    }
+    .feature-card h2 { margin: 0 0 12px; font-size: 23px; }
+    .feature-card p { margin: 0; color: var(--muted); line-height: 1.7; font-size: 14px; }
+    .feature-line { height: 1px; background: var(--line); margin: 25px 0; }
+    .status { display: flex; align-items: center; gap: 9px; color: #c9d7ca; font-size: 12px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-bright); box-shadow: 0 0 12px var(--green-bright); }
+    footer {
+      width: min(1120px, calc(100% - 48px)); margin: auto; padding: 22px 0;
+      border-top: 1px solid var(--line); color: #819086; font-size: 12px;
+      display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    }
+    @media (max-width: 760px) {
+      header { min-height: 72px; }
+      main { grid-template-columns: 1fr; gap: 38px; padding: 58px 0; }
+      h1 { letter-spacing: -1.5px; }
+      .feature-card { padding: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div>ACER <small>COMPANY PORTAL</small></div>
+    </div>
+    <nav><a href="login.html">Employee / Admin Login&nbsp; →</a></nav>
+  </header>
+
+  <main>
+    <section>
+      <div class="eyebrow">Welcome to Acer</div>
+      <h1>Technology that<br><span>moves us forward.</span></h1>
+      <p class="intro">
+        Welcome to the Acer Company Portal. Access company updates, announcements,
+        and important information through one simple and secure space.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href="login.html">Go to Portal Login&nbsp; →</a>
+        <a class="btn btn-secondary" href="#about">Learn More</a>
+      </div>
+    </section>
+
+    <aside class="feature-card" id="about">
+      <div class="card-icon">✦</div>
+      <h2>One portal. One team.</h2>
+      <p>
+        Sign in using your authorized company account to view the employee
+        dashboard. Administrators can access management features using an
+        admin account.
+      </p>
+      <div class="feature-line"></div>
+      <div class="status"><span class="dot"></span> Company portal access</div>
+    </aside>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> Acer Company Portal</span>
+    <span>For authorized employees and administrators</span>
+  </footer>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
